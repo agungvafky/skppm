@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <?php include('partial/head.php'); ?>
+
+</head>
+
+<body id="page-top">
+   <?php 
+    session_start();
+ 
+    // cek apakah yang mengakses halaman ini sudah login
+    if($_SESSION['nidn']==""){
+        header("location:../index.php?pesan=gagal");
+    }
+ 
+    ?>
+
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+
+    <!-- Sidebar -->
+     <?php include('partial/sidebar.php'); ?>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+      <!-- Main Content -->
+      <div id="content">
+
+        <!-- Topbar -->
+        <?php include('partial/topbar.php'); ?>
+        <!-- End of Topbar -->
+
+        <!-- Begin Page Content -->
+          <div class="container-fluid">
+
+         
+          <!-- DataTables -->
+        <div class="card mb-3">
+          <div class="card-header">
+            <a href="pengajuanskpengabdian.php"><i class="fas fa-edit"></i> Ajukan</a>
+          </div>
+          <div class="card-body">
+            <center>
+            <h4>Pengajuan SK Pengabdian Masyarakat</h4>
+            </center>
+
+            <div class="table-responsive">
+            <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
+                <thead align="center">
+                  <tr>
+                    <th>No</th>
+                    <th width="200">Judul</th>
+                    <th>Berkas</th>
+                    <th>Tanggal Pengajuan</th>
+                    <th>Waktu Pengabdian</th>
+                    <th>Tempat Pengabdian</th>
+                    <th>Keterangan</th>
+                     <th width="160">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody align="center">
+                  <?php
+                  include "koneksi.php";
+                  $no=1;
+                  $datad = mysqli_query($koneksi,"select * from pendaftaranskpengabdian");
+                  while($data = mysqli_fetch_array($datad)){
+                  ?>
+                  <tr>
+                    <td><?php echo $no;?></td>
+                    <td><?php echo $data['judul'];?></td>
+                     <td><a href="../berkas/<?php echo $data['berkas']; ?>" download="<?php echo $data['berkas']; ?>"><i class="fas fa-file-pdf"></i><br><?php echo $data['berkas']; ?></a></td>
+                    <td><?php echo $data['tanggal'];?></td>
+                    <td><?php echo $data['hari'];?>, <?php echo $data['bulan'];?> <?php echo $data['tahun'];?></td>
+                    <td><?php echo $data['tempat'];?></td>
+                    <td><b><font color="<?php echo $data['font'];?>"><?php echo $data['keterangan'];?></font></b></td>
+                    <td>
+                    <a href="editpengajuanskpengabdian.php?kode=<?php echo $data['kode']; ?>" class="btn btn-small"><i class="fas fa-edit"></i> Edit</a>
+                    <a href="hapusajukanskpengabdian.php?kode=<?php echo $data['kode']; ?>" class="btn btn-small text-danger"><i class="fas fa-trash"></i> Hapus</a>
+                    </td>
+                  </tr>
+                  <?php $no++; } ?>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        </div>
+      </div>
+         <?php include('partial/footer.php'); ?>
+
+      </div>
+    </div>
+
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <?php include('partial/moodal.php'); ?>
+
+   <?php include('partial/js.php'); ?>
+   
+
+</body>
+
+</html>
